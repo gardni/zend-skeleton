@@ -1,0 +1,26 @@
+<div class="jumbotron">
+    <h1><?php echo sprintf($this->translate('Write %sTestimonial%s'), '<span class="zf-green">', '</span>') ?></h1><br />
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <form method="POST" action="#" class="form-horizontal" name="create">
+                    <div class="form-group">
+                        <label for="name" class="col-sm-3 control-label">Name</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" name="name" id="name" placeholder="Joe Bloggs...">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="testimonial" class="col-sm-3 control-label">Testimonial</label>
+                        <div class="col-sm-9">
+                            <textarea  class="form-control"name="testimonial" id="testimonial" placeholder="I Like this because..." rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <input type="submit" class="btn btn-success btn-lg pull-right" Value="Submit" id="submit">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
