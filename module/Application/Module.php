@@ -43,7 +43,7 @@ class Module
                  },
                  'TestimonialTableGateway' => function ($sm) {
                      $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-                     $resultSetPrototype = new  \Zend\Db\ResultSet\ResultSet();
+                     $resultSetPrototype = new \Zend\Db\ResultSet\ResultSet();
                      $resultSetPrototype->setArrayObjectPrototype(new \Application\Models\Testimonial());
                      return new \Zend\Db\TableGateway\TableGateway('testimonial', $dbAdapter, null, $resultSetPrototype);
                  },

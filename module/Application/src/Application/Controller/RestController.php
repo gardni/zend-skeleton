@@ -1,14 +1,14 @@
 <?php
 namespace Application\Controller;
 
-class UserController extends AbstractRestfulController
+class RestController extends \Zend\Mvc\Controller\AbstractRestfulController
 {
     protected $collectionOptions = array('GET', 'POST');
     protected $resourceOptions = array('GET', 'PUT', 'DELETE');
 
     protected function getOptions()
     {
-        if ($this->params->fromRoute('id', false)) {
+        if ($this->params()->fromRoute('id', false)) {
             return $this->resourceOptions;
         }
 
@@ -23,8 +23,10 @@ class UserController extends AbstractRestfulController
         return $response;
     }
 
-    public function setEventManager(EventManagerInterface $events)
+    public function setEventManager(\Zend\EventManager\EventManagerInterface $events)
     {
+        parent::setEventManager($events);
+
         $this->events = $events;
         $events->attach('dispatch', array($this, 'checkOptions'), 10);
     }
@@ -41,9 +43,30 @@ class UserController extends AbstractRestfulController
         return $reponse;
     }
 
+    public function getList()
+    {
+        $user_api_service = $this->getServiceLocator()->get('Application\Models\TestimonialTable');
+        $result = $user_api_service->fetchAll();
+        $response = $this->getResponse();
+        $response->setStatusCode(201);
+
+        return new \Zend\View\Model\JsonModel($result);
+    }
+
+
+    public function get($id)
+    {
+        $user_api_service = $this->getServiceLocator()->get('Application\Models\TestimonialTable');
+        $result = $user_api_service->update($id);
+        $response = $this->getResponse();
+        $reponse->setStatusCode(201);
+
+        return new \Zend\View\Model\JsonModel($result);
+    }
+
     public function create($data)
     {
-        $user_api_service = $this->getServiceLocator()->get('userAPIService');
+        $user_api_service = $this->getServiceLocator()->get('Application\Models\TestimonialTable');
         $result = $user_api_service->create($data);
         $response = $this->getResponse();
         $reponse->setStatusCode(201);
@@ -53,7 +76,7 @@ class UserController extends AbstractRestfulController
 
     public function update($id, $data)
     {
-        $user_api_service = $this->getServiceLocator()->get('userAPIService');
+        $user_api_service = $this->getServiceLocator()->get('Application\Models\TestimonialTable');
         $result = $user_api_service->update($id, $data);
         $response = $this->getResponse();
         $reponse->setStatusCode(201);

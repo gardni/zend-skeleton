@@ -9,26 +9,40 @@ class TestimonialController extends \Zend\Mvc\Controller\AbstractActionControlle
     protected $postData;
     protected $testimonialTable;
 
-    public function getTestimonialTable()
-    {
-        if (!$this->$testimonialTable) {
-            $sm = $this->getServiceLocator();
-            $this->testimonialTable = $sm->get('Application\Models\TestimonialTable');
-        }
-
-        return $this->testimonialTable;
-    }
     public function indexAction()
     {
-        die('ok');
         return new \Zend\View\Model\ViewModel(array(
              'testimonials' => $this->getTestimonialTable()->fetchAll(),
          ));
     }
 
-    public function getAction()
+    public function addAction()
     {
-        die('so');
+        $request = $this->getRequest();
+        $response = $this->getResponse();
+        if ($request->isPost()) {
+            $testimonial = new \Application\Models\Testimonial();
+            if (!$testimonial_id = $this->getTestimonialTable()->save($testimonial)) {
+                $response->setContent(\Zend\Json\Json::encode(array('response' => false)));
+            } else {
+                $response->setContent(\Zend\Json\Json::encode(array('response' => true, 'id' => $testimonial_id)));
+            }
+        }
+        return $this->redirect()->toRoute('testimonial');
+    }
+
+    public function viewAction()
+    {
+         $id = (int) $this->params()->fromRoute('id', 0);
+         if (!$id) {
+             return $this->redirect()->toRoute('testimonial', array(
+                 'action' => 'add'
+             ));
+         } else {
+            return new \Zend\View\Model\ViewModel(array(
+                'testimonial' => $this->getTestimonialTable()->get($id),
+            ));
+         }
     }
 
     protected function getOptions()
@@ -51,6 +65,8 @@ class TestimonialController extends \Zend\Mvc\Controller\AbstractActionControlle
 
     public function setEventManager(\Zend\EventManager\EventManagerInterface $events)
     {
+        parent::setEventManager($events);
+
         $this->events = $events;
         $events->attach('dispatch', array($this, 'checkOptions'), 10);
     }
@@ -67,48 +83,14 @@ class TestimonialController extends \Zend\Mvc\Controller\AbstractActionControlle
         return $reponse;
     }
 
-    public function create($data)
+    public function getTestimonialTable()
     {
+        if (!$this->testimonialTable) {
+            $sm = $this->getServiceLocator();
+            $this->testimonialTable = $sm->get('Application\Models\TestimonialTable');
+        }
 
-        $user_api_service = $this->getServiceLocator()->get('userAPIService');
-        $result = $user_api_service->create($data);
-        $response = $this->getResponse();
-        $reponse->setStatusCode(201);
-        die('ok');
-
-        return new \Zend\View\Model\JsonModel($result);
-    }
-
-    public function update($id, $data)
-    {
-        die('sasdas');
-        $user_api_service = $this->getServiceLocator()->get('userAPIService');
-        $result = $user_api_service->update($id, $data);
-        $response = $this->getResponse();
-        $reponse->setStatusCode(201);
-
-        return new \Zend\View\Model\JsonModel($result);
-    }
-
-    public function getList()
-    {
-        die('here');
-    }
-
-    public function deleteList()
-    {
-        $reponse = $this->getResponse();
-        $reponse->setStatusCode(400);
-        $result = array(
-            'Error' => array(
-                'HTTP Status' => '400',
-                'Code' => '123',
-                'Message' => 'A User ID is required to delete a user',
-                'More Info' => 'http://www.mysite.com/api/docs/user/delete',
-            ),
-        );
-
-        return new \Zend\View\Model\JsonModel($result);
+        return $this->testimonialTable;
     }
 }
 

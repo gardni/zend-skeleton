@@ -6,19 +6,20 @@
  ?>
  <h1><?php echo $this->escapeHtml($title); ?></h1>
  <p>
-     <a href="<?php echo $this->url('testimonial', array('action'=>'add'));?>">write new testimonial</a>
+     <a href="<?php echo $this->url('home');?>">write new testimonial</a>
  </p>
 
  <table class="table">
  <tr>
-     <th>Title</th>
-     <th>Artist</th>
-     <th>&nbsp;</th>
+     <th>Name</th>
+     <th>Testimonial</th>
+     <th>Action</th>
  </tr>
- <?php foreach ($testimonial as $testimonials) : ?>
+ <?php foreach ($testimonials as $testimonial) : ?>
  <tr>
-     <td><?php echo $this->escapeHtml($testimonial->name);?></td>
-     <td><?php echo $this->escapeHtml($testimonial->testimonial);?></td>
+     <td><?php echo $this->escapeHtml($testimonial->getName());?></td>
+     <td><?php echo $this->escapeHtml($testimonial->getTestimonial());?></td>
+     <td><a href="<?php echo $this->url('testimonial') . 'view/' . $testimonial->getId();?>">view</td>
  </tr>
  <?php endforeach; ?>
  </table>

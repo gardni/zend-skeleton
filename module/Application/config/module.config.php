@@ -4,7 +4,8 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'Application\Controller\Index' => 'Application\Controller\IndexController',
-            'Application\Controller\Testimonial' => 'Application\Controller\TestimonialController'
+            'Application\Controller\Testimonial' => 'Application\Controller\TestimonialController',
+            'rest' => 'Application\Controller\RestController'
         ),
     ),
     'router' => array(
@@ -20,19 +21,30 @@ return array(
                 ),
             ),
             'testimonial' => array(
-                 'type'    => 'Literal',
+                 'type'    => 'segment',
                  'options' => array(
                      'route'    => '/testimonial[/][:action][/:id]',
                      'constraints' => array(
                          'action' => '[a-zA-Z0-9_-]*',
-                         'id'     => '[0-9]+',
+                         'id'     => '[0-9]*',
                      ),
                      'defaults' => array(
                          'controller' => 'Application\Controller\Testimonial',
                          'action' => 'index'
                      ),
                  ),
-             ),
+            ),
+            'rest' => array(
+                'type'    => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'       => '/rest/:controller[.:formatter][/:id]',
+                    'constraints' => array(
+                        'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'formatter'  => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'         => '[a-zA-Z0-9_-]*'
+                    ),
+                ),
+            ),
         ),
     ),
     'service_manager' => array(
