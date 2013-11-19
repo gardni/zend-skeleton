@@ -28,7 +28,8 @@ class TestimonialController extends \Zend\Mvc\Controller\AbstractActionControlle
                 $response->setContent(\Zend\Json\Json::encode(array('response' => true, 'id' => $testimonial_id)));
             }
         }
-        return $this->redirect()->toRoute('testimonial');
+
+        return $response;
     }
 
     public function viewAction()

@@ -1,16 +1,17 @@
-$(function() {
-    $(".submit").click(function(event) {
-        event.preventDefault();
+$(document).ready(function() {
+    $('#create').on('submit', function() {
         $.ajax({
-            type : "POST",
-            url  : "/testimonial/add",
-            data : {
-                'name' : $('#name').val(),
-                'testimonial' : $('#testimonial').val()
+            url     : 'testimonial/add',
+            type    : 'POST',
+            dataType: 'json',
+            data    : $(this).serialize(),
+            success : function( data ) {
+                         location.href = "testimonial"
             },
-            success : function(data) {
-                alert(data);
+            error   : function( xhr, err ) {
+                         alert('Error');
             }
         });
+        return false;
     });
 });
